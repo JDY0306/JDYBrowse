@@ -10,6 +10,8 @@
 #import "SDImageCache.h"
 #import "UIImageView+WebCache.h"
 #import "UIView+MSSLayout.h"
+#import "UIImage+MSSScale.h"
+#import "MSSBrowseDefine.h"
 
 @implementation MSSBrowseNetworkViewController
 
@@ -49,7 +51,11 @@
     }
     else
     {
-        imageView.frame = rect;
+        if (CGRectIsEmpty(rect)) {
+            imageView.frame = [imageView.image mss_getBigImageRectSizeWithScreenWidth:MSS_SCREEN_WIDTH screenHeight:MSS_SCREEN_HEIGHT];
+        } else {
+            imageView.frame = rect;
+        }
     }
 }
 
@@ -75,7 +81,13 @@
             {
                 // 图片加载成功
                 [UIView animateWithDuration:0.5 animations:^{
-                    imageView.frame = rect;
+                    if (CGRectIsEmpty(rect)) {
+                        imageView.frame = [image mss_getBigImageRectSizeWithScreenWidth:MSS_SCREEN_WIDTH screenHeight:MSS_SCREEN_HEIGHT];
+                        browseItem.smallImageView.image = image;
+                    } else {
+                        imageView.frame = rect;
+                    }
+
                 }];
             }
         }
